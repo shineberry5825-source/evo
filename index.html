@@ -4,53 +4,297 @@
     <meta charset="UTF-8">
     <title>에볼루션 바카라 뱅플 마스터</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif; }
-        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .window-container { width: 460px; background: #eef1f5; border: 1px solid #b0bac5; border-radius: 6px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); overflow: hidden; }
-        .title-bar { background-color: #6a7f8e; color: #ffffff; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .title-bar-controls span { margin-left: 10px; cursor: pointer; font-size: 12px; }
-        .content-box { padding: 16px; }
-        .room-info { background-color: #dce2e6; padding: 10px 14px; font-size: 15px; font-weight: bold; color: #222; border-radius: 4px; margin-bottom: 12px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .room-info:hover { background-color: #ced5db; }
-        .login-status-text { font-size: 12px; color: #4a76a8; font-weight: bold; }
-        .round-card { background-color: #ffffff; border: 1px solid #d0d7de; border-radius: 4px; padding: 16px; }
-        .round-title { font-size: 16px; font-weight: bold; color: #111; margin-bottom: 12px; }
-        .round-main-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .round-number { font-size: 36px; font-weight: bold; color: #4a76a8; }
-        .checkbox-container { display: flex; align-items: center; font-size: 14px; color: #222; cursor: pointer; }
-        .checkbox-container input { margin-right: 6px; width: 16px; height: 16px; }
-        .sub-info { font-size: 14px; color: #222; margin-bottom: 16px; line-height: 1.5; }
-        .button-group { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 16px; }
-        .btn { padding: 6px 16px; font-size: 14px; background-color: #e1e6eb; border: 1px solid #9aa0a6; border-radius: 4px; cursor: pointer; }
-        .btn:hover { background-color: #d0d7de; }
-        .status-bar { display: flex; align-items: center; border-top: 1px solid #e1e4e8; padding-top: 12px; font-size: 12px; color: #333; gap: 8px; }
-        .status-light { width: 10px; height: 10px; border-radius: 50%; background-color: #ff4d4f; box-shadow: 0 0 4px rgba(0,0,0,0.2); flex-shrink: 0; }
-        .status-light.active { background-color: #52c41a; }
-        #statusText { white-space: nowrap; flex-shrink: 0; }
-        .progress-track { flex-grow: 1; height: 8px; background-color: #e1e4e8; border-radius: 4px; overflow: hidden; position: relative; }
-        .progress-fill { width: 0%; height: 100%; background-color: #52c41a; border-radius: 4px; }
-        .progress-fill.animating { background: linear-gradient(90deg, #52c41a, #85e89d, #52c41a); background-size: 200% 100%; animation: loadingAnim 1.5s infinite linear; width: 100% !important; }
-        @keyframes loadingAnim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Malgun Gothic', sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .window-container {
+            width: 460px;
+            background: #eef1f5;
+            border: 1px solid #b0bac5;
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+        .title-bar {
+            background-color: #6a7f8e;
+            color: #ffffff;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+        .title-bar-controls span {
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .content-box {
+            padding: 16px;
+        }
+        .room-info {
+            background-color: #dce2e6;
+            padding: 10px 14px;
+            font-size: 15px;
+            font-weight: bold;
+            color: #222;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .room-info:hover {
+            background-color: #ced5db;
+        }
+        .login-status-text {
+            font-size: 12px;
+            color: #4a76a8;
+            font-weight: bold;
+        }
+        .round-card {
+            background-color: #ffffff;
+            border: 1px solid #d0d7de;
+            border-radius: 4px;
+            padding: 16px;
+        }
+        .round-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111;
+            margin-bottom: 12px;
+        }
+        .round-main-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .round-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #4a76a8;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #222;
+            cursor: pointer;
+        }
+        .checkbox-container input {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+        }
+        .sub-info {
+            font-size: 14px;
+            color: #222;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+        .button-group {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-bottom: 16px;
+        }
+        .btn {
+            padding: 6px 16px;
+            font-size: 14px;
+            background-color: #e1e6eb;
+            border: 1px solid #9aa0a6;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #d0d7de;
+        }
+        .status-bar {
+            display: flex;
+            align-items: center;
+            border-top: 1px solid #e1e4e8;
+            padding-top: 12px;
+            font-size: 12px;
+            color: #333;
+            gap: 8px;
+        }
+        .status-light {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ff4d4f;
+            box-shadow: 0 0 4px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        .status-light.active {
+            background-color: #52c41a;
+        }
+        #statusText {
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .progress-track {
+            flex-grow: 1;
+            height: 8px;
+            background-color: #e1e4e8;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background-color: #52c41a;
+            border-radius: 4px;
+        }
+        .progress-fill.animating {
+            background: linear-gradient(90deg, #52c41a, #85e89d, #52c41a);
+            background-size: 200% 100%;
+            animation: loadingAnim 1.5s infinite linear;
+            width: 100% !important;
+        }
+        @keyframes loadingAnim {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
         
-        /* 서버 사용률 인디케이터 스타일 */
-        .server-monitor { display: flex; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e1e4e8; font-size: 12px; color: #555; gap: 8px; }
-        .server-bar-track { flex-grow: 1; height: 6px; background-color: #e1e4e8; border-radius: 3px; overflow: hidden; }
-        .server-bar-fill { width: 21%; height: 100%; background-color: #4a76a8; border-radius: 3px; }
+        .server-monitor {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #e1e4e8;
+            font-size: 12px;
+            color: #555;
+            gap: 8px;
+        }
+        .server-bar-track {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #e1e4e8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .server-bar-fill {
+            width: 21%;
+            height: 100%;
+            background-color: #4a76a8;
+            border-radius: 3px;
+        }
 
-        /* 게임 진행중 알림 마크 */
-        .live-game-notice { display: none; align-items: center; margin-top: 10px; padding: 8px 10px; background-color: #f6ffed; border: 1px solid #b7eb8f; border-radius: 4px; font-size: 12px; color: #52c41a; font-weight: bold; gap: 6px; }
-        .live-dot { width: 8px; height: 8px; background-color: #52c41a; border-radius: 50%; box-shadow: 0 0 4px #52c41a; animation: liveBlink 1s infinite alternate; }
-        @keyframes liveBlink { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+        .live-game-notice {
+            display: none;
+            align-items: center;
+            margin-top: 10px;
+            padding: 8px 10px;
+            background-color: #f6ffed;
+            border: 1px solid #b7eb8f;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #52c41a;
+            font-weight: bold;
+            gap: 6px;
+        }
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #52c41a;
+            border-radius: 50%;
+            box-shadow: 0 0 4px #52c41a;
+            animation: liveBlink 1s infinite alternate;
+        }
+        @keyframes liveBlink {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
 
-        /* 모달창 스타일 */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: #fff; padding: 20px; border-radius: 6px; width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-align: center; }
-        .modal-content h3 { margin-bottom: 10px; font-size: 16px; color: #333; }
-        .modal-content select, .modal-content input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; text-align: left; }
-        .modal-buttons { display: flex; justify-content: flex-end; gap: 6px; }
+        .time-sync-warning {
+            display: none;
+            align-items: center;
+            margin-top: 8px;
+            padding: 7px 10px;
+            background-color: #fffbe6;
+            border: 1px solid #ffe58f;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #faad14;
+            font-weight: bold;
+            gap: 6px;
+        }
+        .warning-icon {
+            font-size: 13px;
+            flex-shrink: 0;
+            animation: warnBlink 1.2s infinite alternate;
+        }
+        @keyframes warnBlink {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
 
-        .load-bar-bg { width: 100%; background: #e1e4e8; height: 12px; border-radius: 6px; margin: 15px 0 10px 0; overflow: hidden; position: relative; }
-        .load-bar-fill { width: 0%; height: 100%; background: #4a76a8; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 6px;
+            width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .modal-content h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+        .modal-content select, .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: left;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+
+        .load-bar-bg {
+            width: 100%;
+            background: #e1e4e8;
+            height: 12px;
+            border-radius: 6px;
+            margin: 15px 0 10px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .load-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #4a76a8;
+            transition: width 0.3s linear;
+        }
     </style>
 </head>
 <body>
@@ -59,7 +303,9 @@
         <div class="title-bar">
             <span>에볼루션 바카라 뱅플 마스터</span>
             <div class="title-bar-controls">
-                <span>🗕</span><span>🗖</span><span>✕</span>
+                <span>🗕</span>
+                <span>🗖</span>
+                <span>✕</span>
             </div>
         </div>
 
@@ -110,11 +356,16 @@
                     <div class="live-dot"></div>
                     <span>현재 게임이 진행중입니다</span>
                 </div>
+
+                <div class="time-sync-warning" id="timeSyncWarning">
+                    <div class="warning-icon">⚠️</div>
+                    <span>서버 설정시간과 게임 설정 시간의 값 차이가 발생합니다. 해결이 필요합니다 정확한 결과값을 불러오지 못합니다.</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 1단계: 보안해제 프로그램 로딩 화면 -->
+    <!-- 1단계: 30초 보안해제 프로그램 로딩 화면 -->
     <div class="modal" id="loadingModal" style="display: flex;">
         <div class="modal-content">
             <h3>보안해제 프로그램 로드중</h3>
@@ -183,51 +434,59 @@
         var hasRoomSelected = false;
         var loggedInUser = "";
 
-        // 페이지 열림과 동시에 30초 보안 로딩 시작 (안전한 동기 타이머 구조)
-        window.onload = function() {
-            var percent = 0;
-            var loadInterval = setInterval(function() {
-                percent += 2; // 약 15초 동안 100% 도달 (지루하지 않게 빠르게 설정)
-                if (percent > 100) percent = 100;
-
-                var fillElem = document.getElementById('loadBarFill');
-                var textElem = document.getElementById('loadingText');
-                if(fillElem) fillElem.style.width = percent + '%';
-                if(textElem) textElem.innerText = "보안 해제 작업 중... (" + percent + "%)";
-
-                if (percent >= 100) {
-                    clearInterval(loadInterval);
-                    // 보안 로딩 창 닫고 -> 로그인 창 띄우기
-                    document.getElementById('loadingModal').style.display = 'none';
-                    document.getElementById('loginModal').style.display = 'flex';
-                }
-            }, 300);
-
-            // 서버 사용률 2초 주기 변동 (21% ~ 73%)
-            setInterval(function() {
-                var randomUsage = Math.floor(Math.random() * (24 - 3 + 1)) + 3;
-                var serverBar = document.getElementById('serverBarFill');
-                var serverTxt = document.getElementById('serverText');
-                if(serverBar) serverBar.style.width = randomUsage + '%';
-                if(serverTxt) serverTxt.innerText = randomUsage + '%';
-            }, 2000);
+        var validAccounts = {
+            "focus00700": { pw: "jkbb7390", nickname: "개구리님" },
+            "focus007001": { pw: "jkbb7390", nickname: "두꺼비님" },
+            "focus007002": { pw: "jkbb7390", nickname: "맹꽁이님" }
         };
 
-        // 로그인 처리 로직
+        // 30초 동안 0% -> 100%까지 끊김 없이 확실하게 차오르는 로딩 루프
+        var currentPercent = 0;
+        var loadInterval = setInterval(function() {
+            currentPercent++;
+            if (currentPercent > 100) currentPercent = 100;
+
+            var fillElem = document.getElementById('loadBarFill');
+            var textElem = document.getElementById('loadingText');
+            if (fillElem) fillElem.style.width = currentPercent + '%';
+            if (textElem) textElem.innerText = "안전한 접속을 위해 준비 중입니다... (" + currentPercent + "%)";
+
+            if (currentPercent >= 100) {
+                clearInterval(loadInterval);
+                document.getElementById('loadingModal').style.display = 'none';
+                document.getElementById('loginModal').style.display = 'flex';
+            }
+        }, 300);
+
+        // 서버 사용률 2초 주기 변동
+        setInterval(function() {
+            var randomUsage = Math.floor(Math.random() * (24 - 3 + 1)) + 3;
+            var serverBar = document.getElementById('serverBarFill');
+            var serverTxt = document.getElementById('serverText');
+            if (serverBar) serverBar.style.width = randomUsage + '%';
+            if (serverTxt) serverTxt.innerText = randomUsage + '%';
+        }, 2000);
+
         function processLogin() {
-            var id = document.getElementById('loginIdInput').value.trim();
-            var pw = document.getElementById('loginPwInput').value.trim();
+            var idInput = document.getElementById('loginIdInput');
+            var pwInput = document.getElementById('loginPwInput');
+            
+            var id = idInput ? idInput.value.trim() : "";
+            var pw = pwInput ? pwInput.value.trim() : "";
 
             if (id === "") { alert("아이디를 입력해주세요!"); return; }
             if (pw === "") { alert("비밀번호를 입력해주세요!"); return; }
 
-            loggedInUser = id;
-            var tag = document.getElementById('loginStatusTag');
-            if(tag) tag.innerText = loggedInUser + "님 로그인중";
+            if (validAccounts[id] && validAccounts[id].pw === pw) {
+                loggedInUser = validAccounts[id].nickname;
+                var tag = document.getElementById('loginStatusTag');
+                if (tag) tag.innerText = loggedInUser + " 로그인중";
 
-            // 로그인 창 닫고 -> 방 선택 창 띄우기
-            document.getElementById('loginModal').style.display = 'none';
-            openOptions();
+                document.getElementById('loginModal').style.display = 'none';
+                openOptions();
+            } else {
+                alert("입력하신 아이디가 존재하지 않습니다.");
+            }
         }
 
         function startProgram() {
@@ -239,9 +498,16 @@
             if (isRunning) return;
             isRunning = true;
 
-            document.getElementById('statusLight').className = "status-light active";
-            document.getElementById('statusText').innerText = "곰돌이 취약점 파악 동작중";
-            document.getElementById('progressBar').className = "progress-fill animating";
+            var sLight = document.getElementById('statusLight');
+            if (sLight) sLight.className = "status-light active";
+            var sText = document.getElementById('statusText');
+            if (sText) sText.innerText = "곰돌이 취약점 파악 동작중";
+            var pBar = document.getElementById('progressBar');
+            if (pBar) pBar.className = "progress-fill animating";
+
+            // 게임 실행 중에만 시간 불일치 경고 노출
+            var warningBox = document.getElementById('timeSyncWarning');
+            if (warningBox) warningBox.style.display = 'flex';
 
             runWaitPhase();
         }
@@ -249,12 +515,15 @@
         function runWaitPhase() {
             if (!isRunning) return;
 
-            document.getElementById('statusTitle').innerText = "잠시 후 새 게임이 시작됩니다";
+            var sTitle = document.getElementById('statusTitle');
+            if (sTitle) sTitle.innerText = "잠시 후 새 게임이 시작됩니다";
+            
             var notice = document.getElementById('liveGameNotice');
-            if(notice) notice.style.display = 'none';
+            if (notice) notice.style.display = 'none';
 
             var waitTime = 10;
-            document.getElementById('timer').innerText = waitTime;
+            var timerElem = document.getElementById('timer');
+            if (timerElem) timerElem.innerText = waitTime;
 
             waitTimeout = setTimeout(function() {
                 if (!isRunning) return;
@@ -271,14 +540,18 @@
                 randomNum2 = Math.floor(Math.random() * 10);
             } while (randomNum2 === randomNum1);
 
-            document.getElementById('roundDisplay').innerText = randomNum1 + " / " + randomNum2;
-            document.getElementById('statusTitle').innerText = "현재 진행중인 회차";
+            var rDisplay = document.getElementById('roundDisplay');
+            if (rDisplay) rDisplay.innerText = randomNum1 + " / " + randomNum2;
+            
+            var sTitle = document.getElementById('statusTitle');
+            if (sTitle) sTitle.innerText = "현재 진행중인 회차";
             
             var notice = document.getElementById('liveGameNotice');
-            if(notice) notice.style.display = 'flex';
+            if (notice) notice.style.display = 'flex';
 
             var count = 10;
-            document.getElementById('timer').innerText = count;
+            var timerElem = document.getElementById('timer');
+            if (timerElem) timerElem.innerText = count;
 
             countInterval = setInterval(function() {
                 if (!isRunning) {
@@ -288,7 +561,7 @@
 
                 if (count > 0) {
                     count--;
-                    document.getElementById('timer').innerText = count;
+                    if (timerElem) timerElem.innerText = count;
                 } else {
                     clearInterval(countInterval);
                     if (isRunning) {
@@ -303,24 +576,38 @@
             clearTimeout(waitTimeout);
             clearInterval(countInterval);
             
-            document.getElementById('statusLight').className = "status-light";
-            document.getElementById('statusText').innerText = "곰돌이 취약점 파악 대기중";
-            document.getElementById('progressBar').className = "progress-fill";
+            var sLight = document.getElementById('statusLight');
+            if (sLight) sLight.className = "status-light";
+            
+            var sText = document.getElementById('statusText');
+            if (sText) sText.innerText = "곰돌이 취약점 파악 대기중";
+            
+            var pBar = document.getElementById('progressBar');
+            if (pBar) pBar.className = "progress-fill";
 
-            document.getElementById('statusTitle').innerText = "현재 진행중인 회차";
-            document.getElementById('roundDisplay').innerText = "- / -";
-            document.getElementById('timer').innerText = "10";
+            var sTitle = document.getElementById('statusTitle');
+            if (sTitle) sTitle.innerText = "현재 진행중인 회차";
+            
+            var rDisplay = document.getElementById('roundDisplay');
+            if (rDisplay) rDisplay.innerText = "- / -";
+            
+            var timerElem = document.getElementById('timer');
+            if (timerElem) timerElem.innerText = "10";
             
             var notice = document.getElementById('liveGameNotice');
-            if(notice) notice.style.display = 'none';
+            if (notice) notice.style.display = 'none';
+
+            // 정지 시 시간 불일치 경고 숨김
+            var warningBox = document.getElementById('timeSyncWarning');
+            if (warningBox) warningBox.style.display = 'none';
         }
 
         function openOptions() {
             var cancelBtn = document.getElementById('cancelBtn');
             if (hasRoomSelected) {
-                if(cancelBtn) cancelBtn.style.display = 'inline-block';
+                if (cancelBtn) cancelBtn.style.display = 'inline-block';
             } else {
-                if(cancelBtn) cancelBtn.style.display = 'none';
+                if (cancelBtn) cancelBtn.style.display = 'none';
             }
             document.getElementById('optionModal').style.display = 'flex';
         }
@@ -332,10 +619,11 @@
 
         function saveRoom() {
             var selectBox = document.getElementById('roomSelect');
-            if(selectBox) {
+            if (selectBox) {
                 var selectedRoom = selectBox.value;
-                resetProgram(); // 새로운 방 선택 시 자동 정지
-                document.getElementById('roomName').innerText = selectedRoom;
+                resetProgram(); 
+                var rName = document.getElementById('roomName');
+                if (rName) rName.innerText = selectedRoom;
                 hasRoomSelected = true;
                 document.getElementById('optionModal').style.display = 'none';
             }
