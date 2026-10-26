@@ -32,6 +32,16 @@
         .progress-fill.animating { background: linear-gradient(90deg, #52c41a, #85e89d, #52c41a); background-size: 200% 100%; animation: loadingAnim 1.5s infinite linear; width: 100% !important; }
         @keyframes loadingAnim { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
         
+        /* 서버 사용률 인디케이터 스타일 */
+        .server-monitor { display: flex; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e1e4e8; font-size: 12px; color: #555; gap: 8px; }
+        .server-bar-track { flex-grow: 1; height: 6px; background-color: #e1e4e8; border-radius: 3px; overflow: hidden; }
+        .server-bar-fill { width: 21%; height: 100%; background-color: #4a76a8; border-radius: 3px; }
+
+        /* 게임 진행중 알림 마크 */
+        .live-game-notice { display: none; align-items: center; margin-top: 10px; padding: 8px 10px; background-color: #f6ffed; border: 1px solid #b7eb8f; border-radius: 4px; font-size: 12px; color: #52c41a; font-weight: bold; gap: 6px; }
+        .live-dot { width: 8px; height: 8px; background-color: #52c41a; border-radius: 50%; box-shadow: 0 0 4px #52c41a; animation: liveBlink 1s infinite alternate; }
+        @keyframes liveBlink { 0% { opacity: 0.3; } 100% { opacity: 1; } }
+
         /* 모달창 스타일 */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: #fff; padding: 20px; border-radius: 6px; width: 300px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-align: center; }
@@ -39,9 +49,8 @@
         .modal-content select, .modal-content input { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; text-align: left; }
         .modal-buttons { display: flex; justify-content: flex-end; gap: 6px; }
 
-        /* 로딩 바 스타일 */
         .load-bar-bg { width: 100%; background: #e1e4e8; height: 12px; border-radius: 6px; margin: 15px 0 10px 0; overflow: hidden; position: relative; }
-        .load-bar-fill { width: 0%; height: 100%; background: #4a76a8; transition: width 0.3s linear; }
+        .load-bar-fill { width: 0%; height: 100%; background: #4a76a8; }
     </style>
 </head>
 <body>
@@ -88,11 +97,24 @@
                         <div class="progress-fill" id="progressBar"></div>
                     </div>
                 </div>
+
+                <div class="server-monitor">
+                    <span>서버 사용률</span>
+                    <div class="server-bar-track">
+                        <div class="server-bar-fill" id="serverBarFill"></div>
+                    </div>
+                    <span id="serverText" style="font-weight: bold; min-width: 32px; text-align: right;">21%</span>
+                </div>
+
+                <div class="live-game-notice" id="liveGameNotice">
+                    <div class="live-dot"></div>
+                    <span>현재 게임이 진행중입니다</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 1단계: 보안해제 프로그램 로딩 화면 (30초) -->
+    <!-- 1단계: 보안해제 프로그램 로딩 화면 -->
     <div class="modal" id="loadingModal" style="display: flex;">
         <div class="modal-content">
             <h3>보안해제 프로그램 로드중</h3>
@@ -125,7 +147,7 @@
             <p style="font-size: 13px; color: #666; margin-bottom: 8px;">이동할 방을 선택하세요:</p>
             
             <select id="roomSelect">
-                 <option value="코리안 럭키 바라카A">코리안 럭키 바라카A</option>
+                <option value="코리안 럭키 바라카A">코리안 럭키 바라카A</option>
                 <option value="럭키 바카라A">럭키 바카라A</option>
                 <option value="럭키 바카라B" selected>럭키 바카라B</option>
                 <option value="럭키 바카라C">럭키 바카라C</option>
@@ -161,23 +183,34 @@
         var hasRoomSelected = false;
         var loggedInUser = "";
 
-        // 페이지 열림과 동시에 30초 보안 로딩 시작
+        // 페이지 열림과 동시에 30초 보안 로딩 시작 (안전한 동기 타이머 구조)
         window.onload = function() {
             var percent = 0;
             var loadInterval = setInterval(function() {
-                percent += 1; // 30초 로딩 (300ms * 100)
+                percent += 2; // 약 15초 동안 100% 도달 (지루하지 않게 빠르게 설정)
                 if (percent > 100) percent = 100;
 
-                document.getElementById('loadBarFill').style.width = percent + '%';
-                document.getElementById('loadingText').innerText = "보안 해제 작업 중... (" + percent + "%)";
+                var fillElem = document.getElementById('loadBarFill');
+                var textElem = document.getElementById('loadingText');
+                if(fillElem) fillElem.style.width = percent + '%';
+                if(textElem) textElem.innerText = "보안 해제 작업 중... (" + percent + "%)";
 
                 if (percent >= 100) {
                     clearInterval(loadInterval);
-                    // 보안 로딩 닫기 -> 로그인 창 띄우기
+                    // 보안 로딩 창 닫고 -> 로그인 창 띄우기
                     document.getElementById('loadingModal').style.display = 'none';
                     document.getElementById('loginModal').style.display = 'flex';
                 }
             }, 300);
+
+            // 서버 사용률 2초 주기 변동 (3% ~ 53%)
+            setInterval(function() {
+                var randomUsage = Math.floor(Math.random() * (43 - 3 + 1)) + 3;
+                var serverBar = document.getElementById('serverBarFill');
+                var serverTxt = document.getElementById('serverText');
+                if(serverBar) serverBar.style.width = randomUsage + '%';
+                if(serverTxt) serverTxt.innerText = randomUsage + '%';
+            }, 2000);
         };
 
         // 로그인 처리 로직
@@ -185,18 +218,12 @@
             var id = document.getElementById('loginIdInput').value.trim();
             var pw = document.getElementById('loginPwInput').value.trim();
 
-            if (id === "") {
-                alert("아이디를 입력해주세요!");
-                return;
-            }
-            if (pw === "") {
-                alert("비밀번호를 입력해주세요!");
-                return;
-            }
+            if (id === "") { alert("아이디를 입력해주세요!"); return; }
+            if (pw === "") { alert("비밀번호를 입력해주세요!"); return; }
 
-            // 로그인 성공 처리 (입력한 아이디 저장)
             loggedInUser = id;
-            document.getElementById('loginStatusTag').innerText = loggedInUser + "님 로그인중";
+            var tag = document.getElementById('loginStatusTag');
+            if(tag) tag.innerText = loggedInUser + "님 로그인중";
 
             // 로그인 창 닫고 -> 방 선택 창 띄우기
             document.getElementById('loginModal').style.display = 'none';
@@ -223,6 +250,9 @@
             if (!isRunning) return;
 
             document.getElementById('statusTitle').innerText = "잠시 후 새 게임이 시작됩니다";
+            var notice = document.getElementById('liveGameNotice');
+            if(notice) notice.style.display = 'none';
+
             var waitTime = 10;
             document.getElementById('timer').innerText = waitTime;
 
@@ -243,6 +273,10 @@
 
             document.getElementById('roundDisplay').innerText = randomNum1 + " / " + randomNum2;
             document.getElementById('statusTitle').innerText = "현재 진행중인 회차";
+            
+            var notice = document.getElementById('liveGameNotice');
+            if(notice) notice.style.display = 'flex';
+
             var count = 10;
             document.getElementById('timer').innerText = count;
 
@@ -276,13 +310,17 @@
             document.getElementById('statusTitle').innerText = "현재 진행중인 회차";
             document.getElementById('roundDisplay').innerText = "- / -";
             document.getElementById('timer').innerText = "10";
+            
+            var notice = document.getElementById('liveGameNotice');
+            if(notice) notice.style.display = 'none';
         }
 
         function openOptions() {
+            var cancelBtn = document.getElementById('cancelBtn');
             if (hasRoomSelected) {
-                document.getElementById('cancelBtn').style.display = 'inline-block';
+                if(cancelBtn) cancelBtn.style.display = 'inline-block';
             } else {
-                document.getElementById('cancelBtn').style.display = 'none';
+                if(cancelBtn) cancelBtn.style.display = 'none';
             }
             document.getElementById('optionModal').style.display = 'flex';
         }
@@ -294,12 +332,13 @@
 
         function saveRoom() {
             var selectBox = document.getElementById('roomSelect');
-            var selectedRoom = selectBox.value;
-            
-            resetProgram(); // 방을 변경할 때마다 자동으로 정지
-            document.getElementById('roomName').innerText = selectedRoom;
-            hasRoomSelected = true;
-            document.getElementById('optionModal').style.display = 'none';
+            if(selectBox) {
+                var selectedRoom = selectBox.value;
+                resetProgram(); // 새로운 방 선택 시 자동 정지
+                document.getElementById('roomName').innerText = selectedRoom;
+                hasRoomSelected = true;
+                document.getElementById('optionModal').style.display = 'none';
+            }
         }
     </script>
 </body>
