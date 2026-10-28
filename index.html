@@ -2,632 +2,307 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>에볼루션 바카라 뱅플 마스터</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시스템 점검 중 - 곰돌이 보안 시스템</title>
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Malgun Gothic', sans-serif;
+            box-sizing: border-box;
         }
+
         body {
-            background-color: #f0f2f5;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-        }
-        .window-container {
-            width: 460px;
-            background: #eef1f5;
-            border: 1px solid #b0bac5;
-            border-radius: 6px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-        }
-        .title-bar {
-            background-color: #6a7f8e;
-            color: #ffffff;
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
-        }
-        .title-bar-controls span {
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .content-box {
-            padding: 16px;
-        }
-        .room-info {
-            background-color: #dce2e6;
-            padding: 10px 14px;
-            font-size: 15px;
-            font-weight: bold;
-            color: #222;
-            border-radius: 4px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .room-info:hover {
-            background-color: #ced5db;
-        }
-        .login-status-text {
-            font-size: 12px;
-            color: #4a76a8;
-            font-weight: bold;
-        }
-        .round-card {
-            background-color: #ffffff;
-            border: 1px solid #d0d7de;
-            border-radius: 4px;
-            padding: 16px;
-        }
-        .round-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #111;
-            margin-bottom: 12px;
-        }
-        .round-main-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .round-number {
-            font-size: 36px;
-            font-weight: bold;
-            color: #4a76a8;
-        }
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            color: #222;
-            cursor: pointer;
-        }
-        .checkbox-container input {
-            margin-right: 6px;
-            width: 16px;
-            height: 16px;
-        }
-        .sub-info {
-            font-size: 14px;
-            color: #222;
-            margin-bottom: 16px;
-            line-height: 1.5;
-        }
-        .button-group {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            margin-bottom: 16px;
-        }
-        .btn {
-            padding: 6px 16px;
-            font-size: 14px;
-            background-color: #e1e6eb;
-            border: 1px solid #9aa0a6;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #d0d7de;
-        }
-        .status-bar {
-            display: flex;
-            align-items: center;
-            border-top: 1px solid #e1e4e8;
-            padding-top: 12px;
-            font-size: 12px;
-            color: #333;
-            gap: 8px;
-        }
-        .status-light {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #ff4d4f;
-            box-shadow: 0 0 4px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-        }
-        .status-light.active {
-            background-color: #52c41a;
-        }
-        #statusText {
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .progress-track {
-            flex-grow: 1;
-            height: 8px;
-            background-color: #e1e4e8;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
-        }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background-color: #52c41a;
-            border-radius: 4px;
-        }
-        .progress-fill.animating {
-            background: linear-gradient(90deg, #52c41a, #85e89d, #52c41a);
-            background-size: 200% 100%;
-            animation: loadingAnim 1.5s infinite linear;
-            width: 100% !important;
-        }
-        @keyframes loadingAnim {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        .server-monitor {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-            padding-top: 10px;
-            border-top: 1px dashed #e1e4e8;
-            font-size: 12px;
-            color: #555;
-            gap: 8px;
-        }
-        .server-bar-track {
-            flex-grow: 1;
-            height: 6px;
-            background-color: #e1e4e8;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .server-bar-fill {
-            width: 21%;
-            height: 100%;
-            background-color: #4a76a8;
-            border-radius: 3px;
-        }
-
-        .live-game-notice {
-            display: none;
-            align-items: center;
-            margin-top: 10px;
-            padding: 8px 10px;
-            background-color: #f6ffed;
-            border: 1px solid #b7eb8f;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #52c41a;
-            font-weight: bold;
-            gap: 6px;
-        }
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #52c41a;
-            border-radius: 50%;
-            box-shadow: 0 0 4px #52c41a;
-            animation: liveBlink 1s infinite alternate;
-        }
-        @keyframes liveBlink {
-            0% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-
-        .time-sync-warning {
-            display: none;
-            align-items: center;
-            margin-top: 8px;
-            padding: 7px 10px;
-            background-color: #fffbe6;
-            border: 1px solid #ffe58f;
-            border-radius: 4px;
-            font-size: 11px;
-            color: #faad14;
-            font-weight: bold;
-            gap: 6px;
-        }
-        .warning-icon {
-            font-size: 13px;
-            flex-shrink: 0;
-            animation: warnBlink 1.2s infinite alternate;
-        }
-        @keyframes warnBlink {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: #fff;
+            min-height: 100vh;
             padding: 20px;
-            border-radius: 6px;
-            width: 300px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .container {
             text-align: center;
-        }
-        .modal-content h3 {
-            margin-bottom: 10px;
-            font-size: 16px;
-            color: #333;
-        }
-        .modal-content select, .modal-content input {
+            background: #1e293b;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            border: 1px solid #334155;
+        }
+
+        .icon-container {
+            font-size: 52px;
+            margin-bottom: 16px;
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        h1 {
+            font-size: 21px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #ffffff;
+            line-height: 1.4;
+        }
+
+        p {
             font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .loading-dots span {
+            animation: blink 1.4s infinite both;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .loading-dots span:nth-child(2) { animation-delay: .2s; }
+        .loading-dots span:nth-child(3) { animation-delay: .4s; }
+
+        @keyframes blink {
+            0% { opacity: .2; }
+            20% { opacity: 1; }
+            100% { opacity: .2; }
+        }
+
+        /* 프로그레스 바 영역 */
+        .progress-box {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
             text-align: left;
         }
-        .modal-buttons {
+
+        .progress-info {
             display: flex;
-            justify-content: flex-end;
-            gap: 6px;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+            color: #cbd5e1;
         }
 
-        .load-bar-bg {
-            width: 100%;
-            background: #e1e4e8;
-            height: 12px;
-            border-radius: 6px;
-            margin: 15px 0 10px 0;
-            overflow: hidden;
-            position: relative;
+        .progress-info span:last-child {
+            color: #38bdf8;
+            font-weight: 600;
         }
-        .load-bar-fill {
-            width: 0%;
+
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background-color: #334155;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
             height: 100%;
-            background: #4a76a8;
-            transition: width 0.3s linear;
+            width: 0%;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .time-left {
+            margin-top: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: center;
+        }
+
+        .time-left strong {
+            color: #f1f5f9;
+        }
+
+        /* 알람 신청 박스 스타일 */
+        .alarm-box {
+            background: #111827;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #374151;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .alarm-text {
+            font-size: 14px;
+            color: #e2e8f0;
+            margin-bottom: 14px;
+            line-height: 1.5;
+        }
+
+        .alarm-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-yes {
+            background-color: #0284c7;
+            color: white;
+        }
+
+        .btn-yes:hover {
+            background-color: #0369a1;
+        }
+
+        .btn-no {
+            background-color: #334155;
+            color: #94a3b8;
+        }
+
+        .btn-no:hover {
+            background-color: #475569;
+            color: #f1f5f9;
+        }
+
+        .alarm-result {
+            font-size: 13px;
+            color: #38bdf8;
+            margin-top: 10px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .footer {
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid #334155;
+            padding-top: 16px;
         }
     </style>
 </head>
 <body>
 
-    <div class="window-container">
-        <div class="title-bar">
-            <span>에볼루션 바카라 뱅플 마스터</span>
-            <div class="title-bar-controls">
-                <span>🗕</span>
-                <span>🗖</span>
-                <span>✕</span>
+    <div class="container">
+        <div class="icon-container">🐻🛡️</div>
+        <h1>곰돌이가 현재 보안 프로그램을<br>서버에 설치하고 있습니다</h1>
+        <p>
+            더 안전하고 안정적인 서비스 제공을 위해<br>
+            서버 보안 업데이트 작업을 진행 중입니다
+            <span class="loading-dots"><span>.</span><span>.</span><span>.</span></span>
+        </p>
+
+        <!-- 프로그레스 바 및 남은 시간 -->
+        <div class="progress-box">
+            <div class="progress-info">
+                <span>설치 진행률</span>
+                <span id="percent-text">0%</span>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" id="progress-fill"></div>
+            </div>
+            <div class="time-left">
+                남은 예상 시간: <strong id="time-text">계산 중...</strong>
             </div>
         </div>
 
-        <div class="content-box">
-            <div class="room-info" onclick="openOptions()">
-                <div>현재 방 : <span id="roomName">선택 안 함</span></div>
-                <div class="login-status-text" id="loginStatusTag">로그인 필요</div>
+        <!-- 알람 신청 영역 -->
+        <div class="alarm-box" id="alarm-section">
+            <div class="alarm-text">
+                작업이 끝나는 대로, 메인 프로그램으로 연결됩니다.<br>
+                작업이 끝나면 알람을 보내드릴까요?
             </div>
-
-            <div class="round-card">
-                <div class="round-title" id="statusTitle">현재 진행중인 회차</div>
-                
-                <div class="round-main-row">
-                    <div class="round-number" id="roundDisplay">- / -</div>
-                    <label class="checkbox-container">
-                        <input type="checkbox" checked> 자동 플레이어 / 뱅커<br>배팅 설정
-                    </label>
-                </div>
-
-                <div class="sub-info">
-                    최대 벳 : N<br>
-                    (타이머: <span id="timer">10</span>초)
-                </div>
-
-                <div class="button-group">
-                    <button class="btn" type="button" onclick="openOptions()">옵션</button>
-                    <button class="btn" type="button" onclick="startProgram()">시작</button>
-                    <button class="btn" type="button" onclick="resetProgram()">정지</button>
-                </div>
-
-                <div class="status-bar">
-                    <div class="status-light" id="statusLight"></div>
-                    <span id="statusText">곰돌이 취약점 파악 대기중</span>
-                    <div class="progress-track">
-                        <div class="progress-fill" id="progressBar"></div>
-                    </div>
-                </div>
-
-                <div class="server-monitor">
-                    <span>서버 사용률</span>
-                    <div class="server-bar-track">
-                        <div class="server-bar-fill" id="serverBarFill"></div>
-                    </div>
-                    <span id="serverText" style="font-weight: bold; min-width: 32px; text-align: right;">21%</span>
-                </div>
-
-                <div class="live-game-notice" id="liveGameNotice">
-                    <div class="live-dot"></div>
-                    <span>현재 게임이 진행중입니다</span>
-                </div>
-
-                <div class="time-sync-warning" id="timeSyncWarning">
-                    <div class="warning-icon">⚠️</div>
-                    <span>서버 설정시간과 게임 설정 시간의 값 차이가 발생합니다. 해결이 필요합니다 정확한 결과값을 불러오지 못합니다.</span>
-                </div>
+            <div class="alarm-buttons" id="alarm-buttons-group">
+                <button class="btn btn-yes" onclick="handleAlarm(true)">예</button>
+                <button class="btn btn-no" onclick="handleAlarm(false)">아니오</button>
             </div>
+            <div class="alarm-result" id="alarm-result-text"></div>
         </div>
-    </div>
 
-    <!-- 1단계: 30초 보안해제 프로그램 로딩 화면 -->
-    <div class="modal" id="loadingModal" style="display: flex;">
-        <div class="modal-content">
-            <h3>보안해제 프로그램 로드중</h3>
-            <p style="font-size: 13px; color: #666;" id="loadingText">안전한 접속을 위해 준비 중입니다... (0%)</p>
-            <div class="load-bar-bg">
-                <div class="load-bar-fill" id="loadBarFill"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 2단계: 로그인 화면 -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content" style="text-align: left;">
-            <h3>프로그램 로그인</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">아이디와 비밀번호를 입력하세요:</p>
-            
-            <input type="text" id="loginIdInput" placeholder="아이디를 입력하세요">
-            <input type="password" id="loginPwInput" placeholder="비밀번호를 입력하세요">
-
-            <div class="modal-buttons">
-                <button class="btn" type="button" style="background-color: #4a76a8; color: white; width: 100%;" onclick="processLogin()">로그인</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 3단계: 방 선택 모달창 -->
-    <div class="modal" id="optionModal">
-        <div class="modal-content" style="text-align: left;">
-            <h3>방 번호 선택</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">이동할 방을 선택하세요:</p>
-            
-            <select id="roomSelect">
-                <option value="코리안 럭키 바라카A">코리안 럭키 바라카A</option>
-                <option value="럭키 바카라A">럭키 바카라A</option>
-                <option value="럭키 바카라B" selected>럭키 바카라B</option>
-                <option value="럭키 바카라C">럭키 바카라C</option>
-                <option value="코리안 스피드 바카라A">코리안 스피드 바카라A</option>
-                <option value="코리안 스피드 바카라B">코리안 스피드 바카라B</option>
-                <option value="코리안 스피드 바카라C">코리안 스피드 바카라C</option>
-                <option value="코리안 스피드 바카라D">코리안 스피드 바카라D</option>
-                <option value="코리안 스피드 바카라E">코리안 스피드 바카라E</option>
-                <option value="스피드 바카라 A">스피드 바카라 A</option>
-                <option value="스피드 바카라 B">스피드 바카라 B</option>
-                <option value="스피드 바카라 C">스피드 바카라 C</option>
-                <option value="스피드 바카라 D">스피드 바카라 D</option>
-                <option value="스피드 바카라 E">스피드 바카라 E</option>
-                <option value="스피드 바카라 F">스피드 바카라 F</option>
-                <option value="스피드 바카라 G">스피드 바카라 G</option>
-                <option value="코리안 스피드 바카라F">코리안 스피드 바카라F</option>
-                <option value="코리안 스피드 바카라G">코리안 스피드 바카라G</option>
-                <option value="코리안 스피드 바카라H">코리안 스피드 바카라H</option>
-                <option value="코리안 스피킹 스피드 바카라A">코리안 스피킹 스피드 바카라A</option>
-            </select>
-
-            <div class="modal-buttons">
-                <button class="btn" type="button" id="cancelBtn" onclick="closeOptions()" style="display: none;">취소</button>
-                <button class="btn" type="button" style="background-color: #4a76a8; color: white;" onclick="saveRoom()">확인</button>
-            </div>
+        <div class="footer">
+            &copy; SHINING BERRY. All rights reserved.
         </div>
     </div>
 
     <script>
-        var waitTimeout = null;
-        var countInterval = null;
-        var isRunning = false;
-        var hasRoomSelected = false;
-        var loggedInUser = "";
+        // 목표 완료 시간: 2026년 10월 29일 오전 10시 00분 00초
+        const targetTime = new Date('2026-10-29T10:00:00').getTime();
+        
+        // 전체 카운트다운의 시작점을 오늘 이 페이지를 연 시점으로 고정하여 퍼센트 계산
+        const startTimestamp = new Date().getTime();
+        const totalTimeSpan = targetTime - startTimestamp;
 
-        var validAccounts = {
-            "focus00700": { pw: "jkbb7390", nickname: "개구리님" },
-            "focus007001": { pw: "jkbb7390", nickname: "두꺼비님" },
-            "focus007002": { pw: "jkbb7390", nickname: "맹꽁이님" }
-        };
+        function updateTimer() {
+            const now = new Date().getTime();
+            const timeLeft = targetTime - now;
 
-        // 30초 동안 0% -> 100%까지 끊김 없이 확실하게 차오르는 로딩 루프
-        var currentPercent = 0;
-        var loadInterval = setInterval(function() {
-            currentPercent++;
-            if (currentPercent > 100) currentPercent = 100;
+            const fillElement = document.getElementById('progress-fill');
+            const percentElement = document.getElementById('percent-text');
+            const timeTextElement = document.getElementById('time-text');
 
-            var fillElem = document.getElementById('loadBarFill');
-            var textElem = document.getElementById('loadingText');
-            if (fillElem) fillElem.style.width = currentPercent + '%';
-            if (textElem) textElem.innerText = "안전한 접속을 위해 준비 중입니다... (" + currentPercent + "%)";
-
-            if (currentPercent >= 100) {
-                clearInterval(loadInterval);
-                document.getElementById('loadingModal').style.display = 'none';
-                document.getElementById('loginModal').style.display = 'flex';
-            }
-        }, 300);
-
-        // 서버 사용률 2초 주기 변동
-        setInterval(function() {
-            var randomUsage = Math.floor(Math.random() * (24 - 3 + 1)) + 3;
-            var serverBar = document.getElementById('serverBarFill');
-            var serverTxt = document.getElementById('serverText');
-            if (serverBar) serverBar.style.width = randomUsage + '%';
-            if (serverTxt) serverTxt.innerText = randomUsage + '%';
-        }, 2000);
-
-        function processLogin() {
-            var idInput = document.getElementById('loginIdInput');
-            var pwInput = document.getElementById('loginPwInput');
-            
-            var id = idInput ? idInput.value.trim() : "";
-            var pw = pwInput ? pwInput.value.trim() : "";
-
-            if (id === "") { alert("아이디를 입력해주세요!"); return; }
-            if (pw === "") { alert("비밀번호를 입력해주세요!"); return; }
-
-            if (validAccounts[id] && validAccounts[id].pw === pw) {
-                loggedInUser = validAccounts[id].nickname;
-                var tag = document.getElementById('loginStatusTag');
-                if (tag) tag.innerText = loggedInUser + " 로그인중";
-
-                document.getElementById('loginModal').style.display = 'none';
-                openOptions();
-            } else {
-                alert("입력하신 아이디가 존재하지 않습니다.");
-            }
-        }
-
-        function startProgram() {
-            if (!hasRoomSelected) {
-                alert("먼저 방을 선택해주세요!");
-                openOptions();
+            if (timeLeft <= 0) {
+                fillElement.style.width = '100%';
+                percentElement.innerText = '100%';
+                timeTextElement.innerText = '설치 완료!';
                 return;
             }
-            if (isRunning) return;
-            isRunning = true;
 
-            var sLight = document.getElementById('statusLight');
-            if (sLight) sLight.className = "status-light active";
-            var sText = document.getElementById('statusText');
-            if (sText) sText.innerText = "곰돌이 취약점 파악 동작중";
-            var pBar = document.getElementById('progressBar');
-            if (pBar) pBar.className = "progress-fill animating";
+            // 1. 남은 시간(일, 시간, 분, 초) 계산
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-            // 게임 실행 중에만 시간 불일치 경고 노출
-            var warningBox = document.getElementById('timeSyncWarning');
-            if (warningBox) warningBox.style.display = 'flex';
+            let timeString = '';
+            if (days > 0) timeString += `${days}일 `;
+            if (hours > 0 || days > 0) timeString += `${hours}시간 `;
+            timeString += `${minutes}분 ${seconds}초`;
 
-            runWaitPhase();
+            timeTextElement.innerText = timeString;
+
+            // 2. 프로그레스 바 퍼센트 계산
+            let elapsed = now - startTimestamp;
+            let percent = (elapsed / totalTimeSpan) * 100;
+            
+            if (percent < 0) percent = 0;
+            if (percent > 99) percent = 99; // 완료 전까지는 99% 유지
+
+            fillElement.style.width = percent.toFixed(1) + '%';
+            percentElement.innerText = Math.floor(percent) + '%';
         }
 
-        function runWaitPhase() {
-            if (!isRunning) return;
+        // 알람 선택 버튼 동작 함수
+        function handleAlarm(isAgree) {
+            const buttonsGroup = document.getElementById('alarm-buttons-group');
+            const resultText = document.getElementById('alarm-result-text');
 
-            var sTitle = document.getElementById('statusTitle');
-            if (sTitle) sTitle.innerText = "잠시 후 새 게임이 시작됩니다";
-            
-            var notice = document.getElementById('liveGameNotice');
-            if (notice) notice.style.display = 'none';
+            buttonsGroup.style.display = 'none'; // 버튼 숨기기
+            resultText.style.display = 'block'; // 결과 문구 띄우기
 
-            var waitTime = 10;
-            var timerElem = document.getElementById('timer');
-            if (timerElem) timerElem.innerText = waitTime;
-
-            waitTimeout = setTimeout(function() {
-                if (!isRunning) return;
-                runCountdownPhase();
-            }, 10000);
-        }
-
-        function runCountdownPhase() {
-            if (!isRunning) return;
-
-            var randomNum1 = Math.floor(Math.random() * 10);
-            var randomNum2;
-            do {
-                randomNum2 = Math.floor(Math.random() * 10);
-            } while (randomNum2 === randomNum1);
-
-            var rDisplay = document.getElementById('roundDisplay');
-            if (rDisplay) rDisplay.innerText = randomNum1 + " / " + randomNum2;
-            
-            var sTitle = document.getElementById('statusTitle');
-            if (sTitle) sTitle.innerText = "현재 진행중인 회차";
-            
-            var notice = document.getElementById('liveGameNotice');
-            if (notice) notice.style.display = 'flex';
-
-            var count = 10;
-            var timerElem = document.getElementById('timer');
-            if (timerElem) timerElem.innerText = count;
-
-            countInterval = setInterval(function() {
-                if (!isRunning) {
-                    clearInterval(countInterval);
-                    return;
-                }
-
-                if (count > 0) {
-                    count--;
-                    if (timerElem) timerElem.innerText = count;
-                } else {
-                    clearInterval(countInterval);
-                    if (isRunning) {
-                        runWaitPhase();
-                    }
-                }
-            }, 1000);
-        }
-
-        function resetProgram() {
-            isRunning = false;
-            clearTimeout(waitTimeout);
-            clearInterval(countInterval);
-            
-            var sLight = document.getElementById('statusLight');
-            if (sLight) sLight.className = "status-light";
-            
-            var sText = document.getElementById('statusText');
-            if (sText) sText.innerText = "곰돌이 취약점 파악 대기중";
-            
-            var pBar = document.getElementById('progressBar');
-            if (pBar) pBar.className = "progress-fill";
-
-            var sTitle = document.getElementById('statusTitle');
-            if (sTitle) sTitle.innerText = "현재 진행중인 회차";
-            
-            var rDisplay = document.getElementById('roundDisplay');
-            if (rDisplay) rDisplay.innerText = "- / -";
-            
-            var timerElem = document.getElementById('timer');
-            if (timerElem) timerElem.innerText = "10";
-            
-            var notice = document.getElementById('liveGameNotice');
-            if (notice) notice.style.display = 'none';
-
-            // 정지 시 시간 불일치 경고 숨김
-            var warningBox = document.getElementById('timeSyncWarning');
-            if (warningBox) warningBox.style.display = 'none';
-        }
-
-        function openOptions() {
-            var cancelBtn = document.getElementById('cancelBtn');
-            if (hasRoomSelected) {
-                if (cancelBtn) cancelBtn.style.display = 'inline-block';
+            if (isAgree) {
+                resultText.innerText = "✓ 작업이 완료되면 자동으로 알람을 발송해 드립니다.";
             } else {
-                if (cancelBtn) cancelBtn.style.display = 'none';
-            }
-            document.getElementById('optionModal').style.display = 'flex';
-        }
-
-        function closeOptions() {
-            if (!hasRoomSelected) return;
-            document.getElementById('optionModal').style.display = 'none';
-        }
-
-        function saveRoom() {
-            var selectBox = document.getElementById('roomSelect');
-            if (selectBox) {
-                var selectedRoom = selectBox.value;
-                resetProgram(); 
-                var rName = document.getElementById('roomName');
-                if (rName) rName.innerText = selectedRoom;
-                hasRoomSelected = true;
-                document.getElementById('optionModal').style.display = 'none';
+                resultText.innerText = "알람 신청이 취소되었습니다.";
+                resultText.style.color = "#94a3b8";
             }
         }
-    </script>
-</body>
-</html>
+
+        // 페이지 로드 직후 바로 실행 후 1초마다 반복
+        updateTimer();
+        setInterval(updateTimer, 1000);
